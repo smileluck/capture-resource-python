@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
     res = page.listen.wait()  # 等待并获取一个数据包
     print(res)
+    
+    res.response.body
 
     for _ in range(5):
 
@@ -26,3 +28,6 @@ if __name__ == "__main__":
         print(res)  # 打印数据包url
 
     time.sleep(100000)
+
+def fetchBody(body):
+    
