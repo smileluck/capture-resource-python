@@ -64,4 +64,4 @@ if __name__ == "__main__":
         for name, value in variables:
             print(f"{name}:{value}")
 
-    print("pixabay爬取完毕")
+    print("videvo爬取完毕")
