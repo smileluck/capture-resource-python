@@ -6,6 +6,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED,FIRST_COMPLETED, as_completed
 
 # s = threading.Semaphore(10)
+pool = ThreadPoolExecutor(max_workers=10)
 list = []
 tlist = []
 
@@ -46,17 +47,16 @@ def insert(li):
             )
             sql = "INSERT INTO `tb_video` (`source_type`, `title`, `license`, `origin_video_url`, `origin_cover_url`, `req_body`, `ai_generate_flag`, `bucket_flag`, `create_time`) VALUES (%s, %s, %s, %s, %s, %s,%s, %s,%s );"
             um.cursor.execute(sql, data)
+            um._conn.commit()
 
-        um._conn.commit()
 
 
 def fetchBody(results):
-    with ThreadPoolExecutor(max_workers=10) as pool:
-        for li in results:
-            tlist.append(pool.submit(insert,li))
+    for li in results:
+        tlist.append(pool.submit(insert,li))
 
-        wait(tlist, return_when=ALL_COMPLETED)
-        print("----complete-----")
+    wait(tlist, return_when=ALL_COMPLETED)
+    print("----complete-----")
 
 
 def loopPage():
@@ -89,4 +89,5 @@ if __name__ == "__main__":
         page.wait(2)
         loopPage()
 
+    pool.shutdown()
     print("shipin爬取完毕")
