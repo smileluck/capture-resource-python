@@ -3,13 +3,18 @@ from utils.mysql import UsingMysql
 import time
 import datetime
 import threading
-from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED,FIRST_COMPLETED, as_completed
+from concurrent.futures import (
+    ThreadPoolExecutor,
+    wait,
+    ALL_COMPLETED,
+    FIRST_COMPLETED,
+    as_completed,
+)
 
 # s = threading.Semaphore(10)
 pool = ThreadPoolExecutor(max_workers=10)
 list = []
 tlist = []
-
 
 
 def insert(li):
@@ -50,10 +55,9 @@ def insert(li):
             um._conn.commit()
 
 
-
 def fetchBody(results):
     for li in results:
-        tlist.append(pool.submit(insert,li))
+        tlist.append(pool.submit(insert, li))
 
     wait(tlist, return_when=ALL_COMPLETED)
     print("----complete-----")
@@ -74,6 +78,7 @@ def loopPage():
         resultBox.next().child().click()
 
 
+
 if __name__ == "__main__":
 
     page = ChromiumPage()
@@ -82,9 +87,13 @@ if __name__ == "__main__":
     page.listen.start("https://shipin520.com/shipin-sp")
     page.get(url)
 
+    num = 1
+
     type = page.ele("text:用途：").next().children()
 
-    for _ in type:
+    while num < len(type):
+        type = page.ele("text:用途：").next().children()
+        _ = type[num]
         _.click()
         page.wait(2)
         loopPage()
