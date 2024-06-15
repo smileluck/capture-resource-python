@@ -87,7 +87,7 @@ if __name__ == "__main__":
     page.listen.start("https://shipin520.com/shipin-sp")
     page.get(url)
 
-    num = 1
+    num = 2
 
     type = page.ele("text:用途：").next().children()
 
